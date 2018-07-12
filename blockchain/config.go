@@ -13,6 +13,7 @@ type Config struct {
 	SidechainEndpoint    url.URL
 	ContractRegistryAddr common.Address
 	BlocksBatchSize      uint64
+	MasterchainGasPrice  int64
 }
 
 func NewDefaultConfig() (*Config, error) {
@@ -39,6 +40,7 @@ func (m *Config) UnmarshalYAML(unmarshal func(interface{}) error) error {
 		SidechainEndpoint    string         `yaml:"sidechain_endpoint"`
 		ContractRegistryAddr common.Address `yaml:"contract_registry"`
 		BlocksBatchSize      uint64         `yaml:"blocks_batch_size" default:"500"`
+		MasterchainGasPrice  int64          `yaml:"masterchain_gas_price" default:"20000000000"`
 	}
 
 	if err := unmarshal(&cfg); err != nil {
@@ -67,6 +69,7 @@ func (m *Config) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	m.SidechainEndpoint = *sidechainEndpoint
 	m.ContractRegistryAddr = cfg.ContractRegistryAddr
 	m.BlocksBatchSize = cfg.BlocksBatchSize
+	m.MasterchainGasPrice = cfg.MasterchainGasPrice
 
 	return nil
 }

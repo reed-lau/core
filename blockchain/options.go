@@ -125,6 +125,7 @@ func WithConfig(cfg *Config) Option {
 				o.contractRegistry = cfg.ContractRegistryAddr
 			}
 			o.blocksBatchSize = cfg.BlocksBatchSize
+			o.masterchain.gasPrice = cfg.MasterchainGasPrice
 		}
 	}
 }
