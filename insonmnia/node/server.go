@@ -69,8 +69,26 @@ func (re *remoteOptions) getWorkerClientForDeal(ctx context.Context, id string) 
 }
 
 func (re *remoteOptions) getWorkerClientByEthAddr(ctx context.Context, eth string) (*workerClient, io.Closer, error) {
+	// TODO(sshaman1101): refactor: represent eth as common address, avoid extra typecast
 	addr := auth.NewAddrRaw(common.HexToAddress(eth), "")
 	return re.workerCreator(ctx, &addr)
+}
+
+// isWorkerAvailable building worker client by eth address, then call .Status method
+func (re *remoteOptions) isWorkerAvailable(ctx context.Context, addr common.Address) bool {
+	worker, closer, err := re.getWorkerClientByEthAddr(ctx, addr.Hex())
+	if err != nil {
+		return false
+	}
+
+	defer closer.Close()
+
+	_, err = worker.Status(ctx, &pb.Empty{})
+	if err != nil {
+		return false
+	}
+
+	return true
 }
 
 func newRemoteOptions(ctx context.Context, key *ecdsa.PrivateKey, cfg *Config, credentials credentials.TransportCredentials) (*remoteOptions, error) {
