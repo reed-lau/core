@@ -84,11 +84,7 @@ func (re *remoteOptions) isWorkerAvailable(ctx context.Context, addr common.Addr
 	defer closer.Close()
 
 	_, err = worker.Status(ctx, &pb.Empty{})
-	if err != nil {
-		return false
-	}
-
-	return true
+	return err == nil
 }
 
 func newRemoteOptions(ctx context.Context, key *ecdsa.PrivateKey, cfg *Config, credentials credentials.TransportCredentials) (*remoteOptions, error) {

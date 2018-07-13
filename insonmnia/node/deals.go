@@ -97,7 +97,6 @@ func (d *dealsAPI) Open(ctx context.Context, req *pb.OpenDealRequest) (*pb.Deal,
 
 	if !req.Force {
 		ctxlog.G(d.remotes.ctx).Debug("checking worker availability")
-		// check that worker is available
 		if available := d.remotes.isWorkerAvailable(ctx, ask.GetAuthorID().Unwrap()); !available {
 			return nil, status.Errorf(codes.Unavailable,
 				"failed to fetch status from %s, seems like worker is offline", ask.GetAuthorID().Unwrap().Hex())
@@ -128,7 +127,6 @@ func (d *dealsAPI) QuickBuy(ctx context.Context, req *pb.QuickBuyRequest) (*pb.D
 	}
 
 	if !req.Force {
-		// check that worker is available
 		ctxlog.G(d.remotes.ctx).Debug("checking worker availability")
 		if available := d.remotes.isWorkerAvailable(ctx, ask.GetAuthorID().Unwrap()); !available {
 			return nil, status.Errorf(codes.Unavailable,
