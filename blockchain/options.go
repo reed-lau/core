@@ -30,7 +30,7 @@ const (
 // (live Eth network, rinkeby, SONM sidechain
 // or local geth-node for testing).
 type chainOpts struct {
-	gasPrice           int64
+	gasPrice           uint64
 	gasLimit           uint64
 	endpoint           string
 	logParsePeriod     time.Duration
@@ -52,7 +52,7 @@ func (c *chainOpts) getTxOpts(ctx context.Context, key *ecdsa.PrivateKey, gasLim
 	opts := bind.NewKeyedTransactor(key)
 	opts.Context = ctx
 	opts.GasLimit = gasLimit
-	opts.GasPrice = big.NewInt(c.gasPrice)
+	opts.GasPrice = big.NewInt(0).SetUint64(c.gasPrice)
 
 	return opts
 }
@@ -86,13 +86,13 @@ func defaultOptions() *options {
 
 type Option func(options *options)
 
-func WithMasterchainGasPrice(p int64) Option {
+func WithMasterchainGasPrice(p uint64) Option {
 	return func(o *options) {
 		o.masterchain.gasPrice = p
 	}
 }
 
-func WithSidechainGasPrice(p int64) Option {
+func WithSidechainGasPrice(p uint64) Option {
 	return func(o *options) {
 		o.sidechain.gasPrice = p
 	}
