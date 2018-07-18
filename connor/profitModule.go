@@ -18,7 +18,6 @@ const (
 	powerConsumption = 0.0
 )
 
-// CALCULATE TOKENS
 type ProfitableModule struct {
 	c *Connor
 }
@@ -61,6 +60,7 @@ func (p *ProfitableModule) getTokensForProfitCalculation() []*TokenMainData {
 		{Symbol: "ZEC"},
 	}
 }
+
 func (p *ProfitableModule) CollectTokensMiningProfit(t watchers.TokenWatcher) ([]*TokenMainData, error) {
 	var tokensForCalc = p.getTokensForProfitCalculation()
 	for _, token := range tokensForCalc {
@@ -98,6 +98,7 @@ func (p *ProfitableModule) CollectTokensMiningProfit(t watchers.TokenWatcher) ([
 	}
 	return tokensForCalc, nil
 }
+
 func (p *ProfitableModule) CalculateMiningProfit(usd, hashesPerSecond, netHashesPerSecond, blockReward, div float64, blockTime int64) (float64, error) {
 	currentHashingPower := hashesPerSecond / div
 	if div == 0 {
@@ -111,14 +112,14 @@ func (p *ProfitableModule) CalculateMiningProfit(usd, hashesPerSecond, netHashes
 	return perMonthUSD, nil
 }
 
-//Limit balance for Charge orders. Default value = 0.5
+// Limit balance for Charge orders. Default value = 0.5
 func (p *ProfitableModule) LimitChargeSNM(balance *big.Int, partCharge float64) *big.Int {
 	limitChargeSNM := balance.Div(balance, big.NewInt(100))
 	limitChargeSNM = limitChargeSNM.Mul(balance, big.NewInt(int64(partCharge*100)))
 	return limitChargeSNM
 }
 
-//converting snmBalance = > USD Balance
+// Сonverting snmBalance = > USD Balance
 func (p *ProfitableModule) ConvertingToUSDBalance(balanceSide *big.Int, snmPrice float64) float64 {
 	bal := balanceSide.Mul(balanceSide, big.NewInt(int64(snmPrice*params.Ether)))
 	bal = bal.Div(bal, big.NewInt(params.Ether))
